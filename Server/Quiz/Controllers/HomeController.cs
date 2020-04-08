@@ -9,7 +9,7 @@ namespace Quiz.Controllers
         {
         }
 
-        [Authorize]
+        //[Authorize]
         [Route("Index")]
         public IActionResult Get()
         {

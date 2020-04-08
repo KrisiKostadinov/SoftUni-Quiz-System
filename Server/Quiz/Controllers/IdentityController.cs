@@ -35,6 +35,11 @@ namespace Quiz.Controllers
                 Email = model.Email
             };
 
+            if (model.Password != model.RepeatPassword)
+            {
+                return BadRequest("The passwords are not consistent.");
+            }
+
             var result = await this.userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
@@ -67,7 +72,8 @@ namespace Quiz.Controllers
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, user.Id.ToString())
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new Claim(ClaimTypes.Name, user.UserName.ToString()),
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
